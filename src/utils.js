@@ -15,7 +15,7 @@ function toScreenPosition(vector3, camera, renderer) {
 };
 
 
-function getNormRelativePosition(obj, normPos, offset = 0) {
+function mapPosition(obj, normPos, offset = 0) {
   obj.geometry.computeBoundingBox();  //QUEST?
   let bbMin = obj.geometry.boundingBox.min;
   let bbMax = obj.geometry.boundingBox.max;
@@ -25,6 +25,11 @@ function getNormRelativePosition(obj, normPos, offset = 0) {
   let z = lerp(normPos[2], bbMin.z - offset, bbMax.z + offset);
 
   return new THREE.Vector3(x, y, z);
+};
+
+
+function lerp (amount, value1, value2) {
+  return value1 + (value2 - value1) * amount;
 };
 
 

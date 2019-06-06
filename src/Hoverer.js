@@ -1,9 +1,10 @@
 class Hoverer {
-  constructor(camera) {
+  constructor(domElement, camera) {
 
     this.camera = camera;
     this.objects = [];
-    
+    this.domElement = domElement;
+
     this.raycaster = new THREE.Raycaster();
     this.raycaster.far = this.camera.far || Infinity; 
     this.raycaster.near = this.camera.near || Infinity; 
@@ -14,41 +15,51 @@ class Hoverer {
     this._onMouseOut = [];
 
     // bind
-    this.updateIntersects = this.updateIntersects.bind(this);
-    this.updateMouse = this.updateMouse.bind(this);
+    this.update = this.update.bind(this);
+    this.setMouse = this.setMouse.bind(this);
 
   }
 
   /* METHODS */
 
-  addObject(obj) {
-    this.objects.push(obj);
+  add(obj) {
+    if (obj instanceof Array) {
+      for (var i = 0, len = obj.length; i < len; i++) {
+        this.objects.push(obj[i]);
+      }
+    } else {
+      this.objects.push(obj);
+    }
+  }
+
+  clear() {
+    this.objects = [];
   }
 
   /* UPDATES */
 
-  updateMouse(clientX, clientY, domElement) {
-    let Rect = domElement.getBoundingClientRect();
+  setMouse(clientX, clientY) {
+    let Rect = this.domElement.getBoundingClientRect();
     let x = clientX - Rect.left;
     let y = clientY - Rect.top;
 
-    this._mouse.x = ( x / domElement.clientWidth ) * 2 - 1;
-    this._mouse.y = - ( y / domElement.clientHeight ) * 2 + 1;
+    this._mouse.x = ( x / this.domElement.clientWidth ) * 2 - 1;
+    this._mouse.y = - ( y / this.domElement.clientHeight ) * 2 + 1;
   }
 
-  updateIntersects() {
+  update() {
     this.raycaster.setFromCamera( this._mouse, this.camera );
     let intersects = this.raycaster.intersectObjects( this.objects, true );
     
     if (intersects.length > 0) {
       if ( this._intersected != intersects[ 0 ].object ) {
-        if ( this._intersected  ) this.doMouseOut();
+        if ( this._intersected  ) this._doMouseOut();
         this._intersected = intersects[0].object;
-        this.doMouseOver();
+        this._doMouseOver();
       }
     } else {
       if ( this._intersected  ) {
-        this.doMouseOut();
+        this._doMouseOut();
       }
       this._intersected  = null;
     }
@@ -64,13 +75,13 @@ class Hoverer {
     this._onMouseOver.push(func)
   }
 
-  doMouseOut(func) {
+  _doMouseOut() {
     for (let func of this._onMouseOut) {
       func(this._intersected );
     }
   }
 
-  doMouseOver(func) {
+  _doMouseOver() {
     for (let func of this._onMouseOver) {
       func(this._intersected );
     }

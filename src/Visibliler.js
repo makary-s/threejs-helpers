@@ -10,15 +10,21 @@ class Visibiler {
     this.raycaster.near = this.camera.near || Infinity; 
   }
 
-  addObstacles(array) {
-    this.obstacles = this.obstacles.concat(array);
+  addObstacles(obj) {
+    if (obj instanceof Array) {
+      for (var i = 0, len = obj.length; i < len; i++) {
+        this.obstacles.push(obj[i]);
+      }
+    } else {
+      this.obstacles.push(obj);
+    }
   }
 
-  addObstacle(object) {
-    this.obstacles.push(object);
+  clearObstacles(obj) {
+    this.obstacles = [];
   }
 
-  addChecker(position, onVisible, onNotVisible, ignoreObjects = null) {
+  addChecker(position, onVisible, onHidden, ignored = null) {
     /* 
       can pass obj
     */
@@ -29,8 +35,8 @@ class Visibiler {
       checkObj = {
         position: position,
         onVisible: onVisible,
-        onNotVisible: onNotVisible,
-        ignoreObjects: ignoreObjects
+        onHidden: onHidden,
+        ignored: ignored
       }
     }
     this.checkObjects.push(checkObj);
@@ -39,7 +45,7 @@ class Visibiler {
   check(position, ignoreObjects = null) {
     /* 
     position (vector3d) 
-    ignoreObjects (three objects array)
+    ignored (three objects array)
     */
 
     let rayDirection = position.clone().sub( this.camera.position).normalize();
@@ -51,8 +57,8 @@ class Visibiler {
     // find intersections
     for (let inter of intersects) { // intersects sorted by distance
       if (inter.distance <= pointDistance) {
-        if (!ignoreObjects) return false;
-        for (let obj of ignoreObjects) {
+        if (!ignored) return false;
+        for (let obj of ignored) {
           if (obj == inter.object) continue;
         }
         return false;
@@ -70,7 +76,7 @@ class Visibiler {
       if (isVisible) {
         checkObj.onVisible()
       } else {				
-        checkObj.onNotVisible()
+        checkObj.onHidden()
       };
     }
 
@@ -78,27 +84,3 @@ class Visibiler {
 }
 
 module.exports = Visibiler;
-
-
-    // var material = new THREE.LineBasicMaterial({ // #remove!
-    //   color: 0x0000ff
-    // });
-    // var geometry = new THREE.Geometry();
-    // geometry.vertices.push(
-    //   position,
-    //   this.raycaster.ray.origin
-    // );
-    // var line = new THREE.Line( geometry, material );
-    // scene.add( line );
-    
-    
-    // var material = new THREE.LineBasicMaterial({
-    //   color: 0x00ffff
-    // });
-    // var geometry = new THREE.Geometry();
-    // geometry.vertices.push(
-    //   intersects[0].point,
-    //   this.raycaster.ray.origin
-    // );
-    // var line = new THREE.Line( geometry, material );
-    // scene.add( line );
