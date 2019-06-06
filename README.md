@@ -1,18 +1,18 @@
 # Что это?
 Набор инструментов для three.js.
 
-### [Hoverer](##Hoverer-1) 
+### [Hoverer](#Hoverer-1) 
   
 Определяет, когда мышь наведена на объект. Учитывает препятствия. Возможна привязка событий.
-### [Visibiler](##Visibiler-1) 
+### [Visibiler](#Visibiler-1) 
 
 Определяет находится ли точка в области видимости камеры. Учитывает препятствия. Возможна привязка событий.
 
-### [Highlighter](##Highlighter-1) 
+### [Highlighter](#Highlighter-1) 
 Подсвечивает объекты.
-### [toScreenPosition](##toScreenPosition-1) 
+### [toScreenPosition](#toScreenPosition-1) 
 Переводит точку в пространстве сцены в координаты canvas.
-### [mapPosition](##mapPosition-1) 
+### [mapPosition](#mapPosition-1) 
 
 Переводит нормализированный вектор в координату в пространстве ограничивающего параллелепипеда объекта.
 
