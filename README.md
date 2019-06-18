@@ -37,15 +37,15 @@ renderer.domElement.addEventListener('mousemove', event => {
 
 function animate() {
   requestAnimationFrame( animate );
-  hoverer.update(); // <-
+  hoverer.update();  // <-
   renderer.render();
 }
 ```
 ### Работа с Hoverer
-Указываем объекты, который хотим отслеживать:
+Указываем объекты, которые хотим отслеживать:
 ```js
 hoverer.add(obj1);  // отслеживается: [obj1]
-hoverer.add([obj2, obj3]);  // отслеживается: [obj2, obj3]
+hoverer.add([obj2, obj3]);  // отслеживается: [obj1, obj2, obj3]
 
 hoverer.clear(); // отслеживается: []
 ```
@@ -77,7 +77,7 @@ var visibiler = new Visibiler(g.camera);
 ```js
 function animate() {
   requestAnimationFrame( animate );
-  visibiler.update();
+  visibiler.update();  // <-
   renderer.render();
 }
 ```
@@ -139,7 +139,7 @@ var composer = new THREE.EffectComposer(g.renderer);
 var renderPass = new THREE.RenderPass(g.scene, g.camera);
 composer.addPass(renderPass);
 
-composer.addPass(highlighter.pass);
+composer.addPass(highlighter.pass);  // <-
 
 function animate() {
   requestAnimationFrame(animate);
@@ -148,7 +148,7 @@ function animate() {
 animate();
 ```
 ### Работа с Highlighter
-Теперь чтобы выделить или объект можно использовать методы `add` или `set`:
+Теперь, чтобы выделить объекты можно использовать методы `add` или `set`:
 ```js
 // добавляем объекты к списку выделенного
 highlighter.add(obj1);  // выделены: [obj1]
